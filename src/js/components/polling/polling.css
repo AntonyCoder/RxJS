@@ -1,0 +1,35 @@
+#root {
+    width: 60%;
+    margin: 10% auto;
+}
+
+.title{
+    margin-bottom: 30px;
+    font-size: 20px;
+}
+
+.message-wrapper {
+    min-height: 60vh;
+    max-height: 60vh;
+    overflow-y: scroll;
+
+    border: 3px solid rgb(100, 155, 255);;
+}
+
+.message-block {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    border: 1px solid rgb(100, 155, 255);
+    padding: 15px;
+    font-size: 14px;
+    text-align: center;
+
+    background-color: rgb(211, 224, 250);
+}
+
+.message-author{
+    width: 40%;
+}
