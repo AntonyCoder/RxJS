@@ -1,4 +1,5 @@
-import './polling.css'
+import './polling.css';
+import moment from 'moment';
 
 export default class Messages {
     constructor(container, stream$) {
@@ -8,22 +9,24 @@ export default class Messages {
         this.container = container;
         this.stream$ = stream$;
 
-        this.renderBlock();
-        this.getData()
+        this._renderBlock();
+        this._getData()
     }
 
-    getData() {
+    _getData() {
         this.stream$.subscribe((data) => {
             if (data.error) {
                 console.error('Произошла ошибка:', data.message);
             } else {
-                this.renderMessage(data.messages[0]);
+                data.messages.forEach(message => {
+                    this._renderMessage(message);
+                })
             }
         })
     }
 
 
-    renderBlock() {
+    _renderBlock() {
         const title = document.createElement('h2');
         title.classList.add('title');
         title.textContent = 'Incoming';
@@ -35,7 +38,7 @@ export default class Messages {
         this.container.append(title, messageWrapper);
     }
 
-    renderMessage(message) {
+    _renderMessage(message) {
         const messageBlock = document.createElement('div');
         messageBlock.classList.add('message-block');
 
@@ -46,22 +49,26 @@ export default class Messages {
         const messageText = document.createElement('p');
         messageText.classList.add('message-text');
 
-        const subject = this.limitText(message.subject);
+        const subject = this._limitText(message.subject);
 
         messageText.textContent = subject;
 
         const messageDate = document.createElement('p');
         messageDate.classList.add('message-date');
-        messageDate.textContent = new Date(message.received * 1000).toLocaleString();
+        messageDate.textContent = this._formatDate(message.received)
 
         messageBlock.append(messageAuthor, messageText, messageDate);
 
         this.messageWrapper.prepend(messageBlock);
     }
 
-    limitText(text){
+    _formatDate(date){
+        const convertedDate = moment.unix(date).format('hh:mm DD.MM.YYYY');
+        return convertedDate;
+    }
+
+    _limitText(text){
         if(text.length > 15){
-            console.log(text);
             return text.slice(0, 15) + '...';
         }
         return text
